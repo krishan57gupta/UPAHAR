@@ -1,8 +1,6 @@
 # UPAHAR
 Ultrasound Placental image texture Analysis for prediction of Hypertension during pregnancy using Artificial intelligence Research
 
-
-
 ```
 from google.colab import drive
 drive.mount('/content/drive')
