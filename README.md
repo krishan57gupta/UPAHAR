@@ -56,12 +56,11 @@ cwd
 
 ```
 # initialization
-selected_cases="CF" # CH for control and htn , CF for control and fgr, CFH for a
-selected_trimester="23" # 1 for first , 2 for second, 3 for third , 12 for first second, 23 for second third , 13 for first third, 123 for all
+selected_cases="CH" # CH for control and htn
+selected_trimester="123" # 123 for all trimesters
 image_folder="saved_5_"+selected_cases+"_"+selected_trimester
 results_folder="results_5_"+selected_cases+"_"+selected_trimester
 c_path_control='/content/drive/My Drive/Deep_Learning_Altrasound_Images/placenta_folder_filtered/placenta  folder/CONTROLS copy'
-c_path_fgr='/content/drive/My Drive/Deep_Learning_Altrasound_Images/placenta_folder_filtered/placenta  folder/cases /fgr copy'
 c_path_htn='/content/drive/My Drive/Deep_Learning_Altrasound_Images/placenta_folder_filtered/placenta  folder/cases /htn copy'
 PATH="/content/drive/My Drive/Deep_Learning_Altrasound_Images/"
 if not os.path.exists(PATH+image_folder):
@@ -156,21 +155,6 @@ def get_trimester_wise_folder_list(folder_path,selected_trimester):
   """print(sub1)
   print(sub2)
   print(sub3)"""
-  if selected_trimester =="1":
-    selected_path=sub1
-  if selected_trimester =="2":
-    selected_path=sub2
-  if selected_trimester =="3":
-    selected_path=sub3
-  if selected_trimester =="12":
-    selected_path=sub1
-    selected_path.extend(sub2)
-  if selected_trimester =="23":
-    selected_path=sub2
-    selected_path.extend(sub3)
-  if selected_trimester =="13":
-    selected_path=sub1
-    selected_path.extend(sub3)
   if selected_trimester =="123":
     selected_path=sub1
     selected_path.extend(sub2)
@@ -185,7 +169,7 @@ def get_trimester_wise_folder_list(folder_path,selected_trimester):
 if entry_gate:
   !pip install SimpleITK
   import SimpleITK as sitk
-  count_image={'control':0,'fgr':0,'htn':0}
+  count_image={'control':0,'htn':0}
   os.chdir(new_images_path)
   print("selected_cases: ",selected_cases)
   print("selected_trimester: ",selected_trimester)
@@ -209,26 +193,6 @@ if entry_gate:
         print("control ",sitk_t2.shape)
         image_data_with_control.append(sitk_t2)
 
-  # reading fgr images path
-  selected_path=get_trimester_wise_folder_list(c_path_fgr,selected_trimester)
-  image_path_with_fgr=[]
-  for path in selected_path:
-    path = os.path.join(path)
-    for path, subdirs, files in os.walk(path):
-      for name in files:
-        image_path_with_fgr.append(os.path.join(path, name))
-  # reading fgr path images
-  image_data_with_fgr=[]
-  for i in range(len(image_path_with_fgr)):
-    if(image_path_with_fgr[i].endswith("JPG")):
-      sitk_t1 = sitk.ReadImage(image_path_with_fgr[i])
-      sitk_t1=sitk.GetArrayFromImage(sitk_t1)
-      if(sitk_t1.shape[0]<check_image or sitk_t1.shape[1]<check_image):
-        count_image['fgr']+=1
-        sitk_t2=sitk_t1
-        print("fgr ",sitk_t2.shape)
-        image_data_with_fgr.append(sitk_t2)
-
   # reading htn images path
   selected_path=get_trimester_wise_folder_list(c_path_htn,selected_trimester)
   image_path_with_htn=[]
@@ -250,16 +214,14 @@ if entry_gate:
         image_data_with_htn.append(sitk_t2)
 
   print("control_len: ",len(image_data_with_control))
-  print("fgr_len: ",len(image_data_with_fgr))
   print("htn_len: ",len(image_data_with_htn))
 
   Image_data=[]
   Image_data.extend(image_data_with_control)
-  Image_data.extend(image_data_with_fgr)
   Image_data.extend(image_data_with_htn)
-  # Image_label = np.array(["control", "fge","htn"])
-  Image_label = np.array([0,1,2])
-  Image_label = np.repeat(Image_label, [len(image_data_with_control), len(image_data_with_fgr),len(image_data_with_htn)], axis=0)
+  # Image_label = np.array(["control","htn"])
+  Image_label = np.array([0,1])
+  Image_label = np.repeat(Image_label, [len(image_data_with_control),len(image_data_with_htn)], axis=0)
   print("Image_data_len: ",len(Image_data))
   print("Image_data_label_len: ",len(Image_label))
 
@@ -267,39 +229,8 @@ if entry_gate:
   X_train_1, X_test_1, Y_train_1, Y_test_1=X_train, X_test, Y_train, Y_test
   print("Trian: ",len(X_train_1))
   print("Test: ",len(X_test_1))
-  print("but its total of all cases and "+selected_trimester+" selected_trimester")
-  print("Now in next steps it will divide further in selected_cases ",selected_cases)
 
   # saving images in corresponding folders
-  if selected_cases=="CFH":
-    if os.path.exists(new_images_path+"/train"):
-      shutil.rmtree("train")
-    if os.path.exists(new_images_path+"/val"):
-      shutil.rmtree("val")
-    os.mkdir("train")
-    os.mkdir("val")
-    os.chdir(new_images_path+"/train")
-    os.mkdir("control")
-    os.mkdir("fgr")
-    os.mkdir("htn")
-    os.chdir(new_images_path+"/val")
-    os.mkdir("control")
-    os.mkdir("fgr")
-    os.mkdir("htn")
-    for i in range(len(Y_train_1)):
-      if Y_train_1[i]==0:
-        cv2.imwrite(new_images_path+"/train/control/image"+str(i)+".jpg",X_train_1[i]) 
-      if Y_train_1[i]==1:
-        cv2.imwrite(new_images_path+"/train/fgr/image"+str(i)+".jpg",X_train_1[i]) 
-      if Y_train_1[i]==2:
-        cv2.imwrite(new_images_path+"/train/htn/image"+str(i)+".jpg",X_train_1[i]) 
-    for i in range(len(Y_test_1)):
-      if Y_test_1[i]==0:
-        cv2.imwrite(new_images_path+"/val/control/image"+str(i)+".jpg",X_test_1[i]) 
-      if Y_test_1[i]==1:
-        cv2.imwrite(new_images_path+"/val/fgr/image"+str(i)+".jpg",X_test_1[i]) 
-      if Y_test_1[i]==2:
-        cv2.imwrite(new_images_path+"/val/htn/image"+str(i)+".jpg",X_test_1[i])
   if selected_cases=="CH":
     if os.path.exists(new_images_path+"/train"):
       shutil.rmtree("train")
@@ -323,29 +254,6 @@ if entry_gate:
         cv2.imwrite(new_images_path+"/val/control/image"+str(i)+".jpg",X_test_1[i])  
       if Y_test_1[i]==2:
         cv2.imwrite(new_images_path+"/val/htn/image"+str(i)+".jpg",X_test_1[i])
-  if selected_cases=="CF":
-    if os.path.exists(new_images_path+"/train"):
-      shutil.rmtree("train")
-    if os.path.exists(new_images_path+"/val"):
-      shutil.rmtree("val")
-    os.mkdir("train")
-    os.mkdir("val")
-    os.chdir(new_images_path+"/train")
-    os.mkdir("control")
-    os.mkdir("fgr")
-    os.chdir(new_images_path+"/val")
-    os.mkdir("control")
-    os.mkdir("fgr")
-    for i in range(len(Y_train_1)):
-      if Y_train_1[i]==0:
-        cv2.imwrite(new_images_path+"/train/control/image"+str(i)+".jpg",X_train_1[i]) 
-      if Y_train_1[i]==1:
-        cv2.imwrite(new_images_path+"/train/fgr/image"+str(i)+".jpg",X_train_1[i]) 
-    for i in range(len(Y_test_1)):
-      if Y_test_1[i]==0:
-        cv2.imwrite(new_images_path+"/val/control/image"+str(i)+".jpg",X_test_1[i]) 
-      if Y_test_1[i]==1:
-        cv2.imwrite(new_images_path+"/val/fgr/image"+str(i)+".jpg",X_test_1[i]) 
   print("sample sizes before augmentation: ",count_image)
 ```
 
@@ -374,40 +282,13 @@ data_transforms = {
 }
 ```
 
-
 ```
-
-"""data_transforms = {
-    # Train uses data augmentation
-    'train':
-    transforms.Compose([
-        transforms.Resize(size=new_image_size_1),
-        transforms.CenterCrop(size=new_image_size_2),
-        transforms.ToTensor(),
-        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])  # Imagenet standards
-    ]),
-    # Validation does not use augmentation
-    'val':
-    transforms.Compose([
-        transforms.Resize(size=new_image_size_1),
-        transforms.CenterCrop(size=new_image_size_2),
-        transforms.ToTensor(),
-        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) 
-    ]),
-}"""
-```
-
-
-
-
     "data_transforms = {\n    # Train uses data augmentation\n    'train':\n    transforms.Compose([\n        transforms.Resize(size=new_image_size_1),\n        transforms.CenterCrop(size=new_image_size_2),\n        transforms.ToTensor(),\n        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])  # Imagenet standards\n    ]),\n    # Validation does not use augmentation\n    'val':\n    transforms.Compose([\n        transforms.Resize(size=new_image_size_1),\n        transforms.CenterCrop(size=new_image_size_2),\n        transforms.ToTensor(),\n        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) \n    ]),\n}"
 
 
 
 
 ```
-"""data_dir = '/content/drive/My Drive/Deep_Learning_Altrasound_Images/saved'
-batch_size=16"""
 image_datasets = {x: datasets.ImageFolder(os.path.join(new_images_path, x),
                                           data_transforms[x])
                   for x in ['train', 'val']}
@@ -816,9 +697,6 @@ for i in models_list:
       num_ftrs = model_ft.fc.in_features
       model_ft.fc = nn.Linear(num_ftrs, len(class_names))
       pretrained=pretrained_1
-
-    # for more then 2 classes in any model
-    # model_ft = nn.Sequential(model_ft,nn.Softmax(1))
 
     model_ft = model_ft.to(device)
 
@@ -1257,14 +1135,6 @@ models_result=pd.read_csv(PATH+"models_result"+"_"+other+".csv")
 if selected_cases in ["CH"]:
   CM=pd.DataFrame(index=['Truth_controls_Pred_control','Truth_controls_Pred_hypertension','Truth_hypertension_Pred_control','Truth_hypertension_Pred_hypertension',
                        'Truth_controls','Truth_hypertension','Pred_controls','Pred_hypertension'])
-if selected_cases in ["CF"]:
-  CM=pd.DataFrame(index=['Truth_controls_Pred_control','Truth_controls_Pred_fgr','Truth_fgr_Pred_control','Truth_fgr_Pred_fgr',
-                       'Truth_controls','Truth_fgr','Pred_controls','Pred_fgr'])
-if selected_cases in ["CFH"]:
-  CM=pd.DataFrame(index=['Truth_controls_Pred_control','Truth_controls_Pred_fgr','Truth_control_Pred_hypertension',
-                         'Truth_fgr_Pred_control','Truth_fgr_Pred_fgr','Truth_fgr_Pred_hypertension',
-                         'Truth_hypertension_Pred_control','Truth_hypertension_Pred_fgr','Truth_hypertension_Pred_hypertension',
-                       'Truth_controls','Truth_fgr','Truth_hypertension','Pred_controls','Pred_fgr','Pred_hypertension'])
 
 for i in models_list:
   print(i)
@@ -1618,174 +1488,10 @@ CM
       <td>6</td>
       <td>4</td>
     </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-
-```
-import matplotlib.pyplot as plt
-models_result_plot_1=pd.read_csv(PATH+"models_result_plot"+"_"+other+".csv")
-if not os.path.exists(PATH+"figures"):
-    os.chdir(PATH)
-    os.mkdir("figures")
-if not os.path.exists(PATH+"models"):
-    os.chdir(PATH)
-    os.mkdir("models")
-for model in models_list:
-    print(model)
-    saved_model=model+"_"+other
-    model_path_1=PATH+"models/"+saved_model
-    model_path_2=PATH+"figures"
-    os.chdir(model_path_2)
-    if not os.path.exists(saved_model):
-        os.makedirs(saved_model)
-    plt.plot(models_result_plot_1[model+"_train_loss"],label="train")
-    plt.plot(models_result_plot_1[model+"_val_loss"],label="val")
-    plt.xlabel('epochs')
-    plt.ylabel('loss')
-    plt.title('training and validating loss with each epoch')
-    plt.legend()
-    plt.savefig(model_path_2+"/"+saved_model+"/"+"loss_plot"+".png")
-    plt.close()
-    plt.plot(models_result_plot_1[model+"_train_acc"],label="train")
-    plt.plot(models_result_plot_1[model+"_val_acc"],label="val")
-    plt.xlabel('epochs')
-    plt.ylabel('accuracy')
-    plt.title('training and validating accuracy with each epoch')
-    plt.legend()
-    plt.savefig(model_path_2+"/"+saved_model+"/"+"acc_plot"+".png")
-    plt.close()
-```
-
-    resnet18
-    resnet34
-    resnet50
-    resnet101
-    resnet152
-    densenet121
-    densenet161
-    densenet169
-    densenet201
-    vgg11
-    vgg13
-    vgg16
-    vgg19
-    vgg11_bn
-    vgg13_bn
-    vgg16_bn
-    vgg19_bn
-    wide_resnet50_2
-    wide_resnet101_2
-    resnext50_32x4d
-    resnext101_32x8d
-    squeezenet1_0
-    squeezenet1_1
-    googlenet
-    alexnet
-    shufflenet_v2_x1_0
-    mobilenet_v2
-    mnasnet1_0
-    inception_v3
-
-
-
-```
-
-"""import matplotlib
-matplotlib.use('Agg')
-# import matplotlib.pyplot as plt
-num_cols = 25
-num_rows = 400
-if not os.path.exists(PATH+"figures"):
-    os.chdir(PATH)
-    os.mkdir("figures")
-if not os.path.exists(PATH+"models"):
-    os.chdir(PATH)
-    os.mkdir("models")
-## normalizing tensor
-def norm_tensor(tensor):
-  maxVal = tensor.max()
-  minVal = abs(tensor.min())
-  maxVal = max(maxVal,minVal)
-  tensor = tensor / maxVal
-  tensor = tensor / 2
-  tensor = tensor + 0.5
-  return (tensor)
-def plot_kernels(tensor, num_cols=20, num_rows=20):
-    fig = plt.figure(figsize=(num_cols,num_rows))
-    i = 0
-    for t in tensor:
-      # t=norm_tensor(t)
-      if i>num_cols*num_rows or (i%1000==0 and i>0):
-        print(i)
-      # print(i)
-      # print(t)
-      ax1 = fig.add_subplot(num_rows,num_cols,i+1)
-      pilTrans = transforms.ToPILImage()
-      pilImg = pilTrans(t)
-      ax1.imshow(pilImg, interpolation='none')
-      # print(tensor[i])
-      ax1.axis('off')
-      ax1.set_xticklabels([])
-      ax1.set_yticklabels([])
-      i+=1
-
-    plt.subplots_adjust(wspace=0.1, hspace=0.1)
-    plt.show()
-for model in models_list:
-    print(model)
-    saved_model=model+"_"+other
-    model_path_1=PATH+"models/"+saved_model
-    model_path_2=PATH+"figures"
-    os.chdir(model_path_2)
-    if not os.path.exists(saved_model):
-        os.makedirs(saved_model)
-    model_name = torch.load(model_path_1)
-
-    j = 0
-    for m in model_name.modules():
-      if isinstance(m, nn.Conv2d):
-          plot_kernels(m.weight.data.clone().cpu(),num_cols=num_cols, num_rows=num_rows)
-          plt.savefig(model_path_2+"/"+saved_model+"/"+str(j)+".png")
-          plt.close()
-          j+=1"""
-```
-
-
-
-
-    'import matplotlib\nmatplotlib.use(\'Agg\')\n# import matplotlib.pyplot as plt\nnum_cols = 25\nnum_rows = 400\nif not os.path.exists(PATH+"figures"):\n    os.chdir(PATH)\n    os.mkdir("figures")\nif not os.path.exists(PATH+"models"):\n    os.chdir(PATH)\n    os.mkdir("models")\n## normalizing tensor\ndef norm_tensor(tensor):\n  maxVal = tensor.max()\n  minVal = abs(tensor.min())\n  maxVal = max(maxVal,minVal)\n  tensor = tensor / maxVal\n  tensor = tensor / 2\n  tensor = tensor + 0.5\n  return (tensor)\ndef plot_kernels(tensor, num_cols=20, num_rows=20):\n    fig = plt.figure(figsize=(num_cols,num_rows))\n    i = 0\n    for t in tensor:\n      # t=norm_tensor(t)\n      if i>num_cols*num_rows or (i%1000==0 and i>0):\n        print(i)\n      # print(i)\n      # print(t)\n      ax1 = fig.add_subplot(num_rows,num_cols,i+1)\n      pilTrans = transforms.ToPILImage()\n      pilImg = pilTrans(t)\n      ax1.imshow(pilImg, interpolation=\'none\')\n      # print(tensor[i])\n      ax1.axis(\'off\')\n      ax1.set_xticklabels([])\n      ax1.set_yticklabels([])\n      i+=1\n\n    plt.subplots_adjust(wspace=0.1, hspace=0.1)\n    plt.show()\nfor model in models_list:\n    print(model)\n    saved_model=model+"_"+other\n    model_path_1=PATH+"models/"+saved_model\n    model_path_2=PATH+"figures"\n    os.chdir(model_path_2)\n    if not os.path.exists(saved_model):\n        os.makedirs(saved_model)\n    model_name = torch.load(model_path_1)\n\n    j = 0\n    for m in model_name.modules():\n      if isinstance(m, nn.Conv2d):\n          plot_kernels(m.weight.data.clone().cpu(),num_cols=num_cols, num_rows=num_rows)\n          plt.savefig(model_path_2+"/"+saved_model+"/"+str(j)+".png")\n          plt.close()\n          j+=1'
-
-
-
-
+  </t
 ```
 
 ```
-
-
-```
-
-```
-
-
-```
-
-```
-
-
-```
-
-```
-
-
-```
-
-```
-
 
 ```
 
