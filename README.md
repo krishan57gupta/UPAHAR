@@ -440,39 +440,6 @@ if entry_gate:
       print("sample sizes before augmentation: ",count_image)
       print("sample_sizes after augmentation: ",final_count_images)
 ```
-
-
-```
-"""data_transforms = {
-    # Train uses data augmentation
-    'train':
-    transforms.Compose([
-        transforms.RandomResizedCrop(size=new_image_size_1, scale=(0.8, 1.0)),
-        transforms.RandomRotation(degrees=1),
-        transforms.RandomHorizontalFlip(),
-        transforms.CenterCrop(size=new_image_size_2),  # Image net standards
-        transforms.ToTensor(),
-        transforms.Normalize([0.485, 0.456, 0.406],[0.229, 0.224, 0.225])  # Imagenet standards
-    ]),
-    # Validation does not use augmentation
-    'val':
-    transforms.Compose([
-        transforms.Resize(size=new_image_size_1),
-        transforms.CenterCrop(size=new_image_size_2),
-        transforms.ToTensor(),
-        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-    ]),
-}"""
-```
-
-
-
-
-    "data_transforms = {\n    # Train uses data augmentation\n    'train':\n    transforms.Compose([\n        transforms.RandomResizedCrop(size=new_image_size_1, scale=(0.8, 1.0)),\n        transforms.RandomRotation(degrees=1),\n        transforms.ColorJitter(),\n        transforms.RandomHorizontalFlip(),\n        transforms.CenterCrop(size=new_image_size_2),  # Image net standards\n        transforms.ToTensor(),\n        transforms.Normalize([0.485, 0.456, 0.406],[0.229, 0.224, 0.225])  # Imagenet standards\n    ]),\n    # Validation does not use augmentation\n    'val':\n    transforms.Compose([\n        transforms.Resize(size=new_image_size_1),\n        transforms.CenterCrop(size=new_image_size_2),\n        transforms.ToTensor(),\n        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])\n    ]),\n}"
-
-
-
-
 ```
 def imshow(inp, title=None):
     """Imshow for Tensor."""
@@ -706,124 +673,6 @@ for  kk in range(k_fold):
     for i in models_list:
       print(i)
       if i not in models_score.columns:
-        if(i=="resnet18"):
-          model_ft = models.resnet18(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.fc.in_features
-          model_ft.fc = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-        if(i=="resnet34"):
-          model_ft = models.resnet34(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.fc.in_features
-          model_ft.fc = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-        if(i=="resnet50"):
-          model_ft = models.resnet50(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.fc.in_features
-          model_ft.fc = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-        if(i=="resnet101"):
-          model_ft = models.resnet101(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.fc.in_features
-          model_ft.fc = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-        if(i=="resnet152"):
-          model_ft = models.resnet152(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.fc.in_features
-          model_ft.fc = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-        if(i=="vgg11"):
-          model_ft = models.vgg11(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[6].in_features
-          features = list(model_ft.classifier.children())[:-1]
-          features.extend([nn.Linear(num_ftrs, len(class_names))])
-          model_ft.classifier = nn.Sequential(*features)
-          pretrained=pretrained_1
-        if(i=="vgg13"):
-          model_ft = models.vgg13(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[6].in_features
-          features = list(model_ft.classifier.children())[:-1]
-          features.extend([nn.Linear(num_ftrs, len(class_names))])
-          model_ft.classifier = nn.Sequential(*features)
-          pretrained=pretrained_1
-        if(i=="vgg16"):
-          model_ft = models.vgg16(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[6].in_features
-          features = list(model_ft.classifier.children())[:-1]
-          features.extend([nn.Linear(num_ftrs, len(class_names))])
-          model_ft.classifier = nn.Sequential(*features)
-          pretrained=pretrained_1
-        if(i=="vgg19"):
-          model_ft = models.vgg19(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[6].in_features
-          features = list(model_ft.classifier.children())[:-1]
-          features.extend([nn.Linear(num_ftrs, len(class_names))])
-          model_ft.classifier = nn.Sequential(*features)
-          pretrained=pretrained_1
-        if(i=="vgg11_bn"):
-          model_ft = models.vgg11_bn(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[6].in_features
-          features = list(model_ft.classifier.children())[:-1]
-          features.extend([nn.Linear(num_ftrs, len(class_names))])
-          model_ft.classifier = nn.Sequential(*features)
-          pretrained=pretrained_1
-        if(i=="vgg13_bn"):
-          model_ft = models.vgg13_bn(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[6].in_features
-          features = list(model_ft.classifier.children())[:-1]
-          features.extend([nn.Linear(num_ftrs, len(class_names))])
-          model_ft.classifier = nn.Sequential(*features)
-          pretrained=pretrained_1
-        if(i=="vgg16_bn"):
-          model_ft = models.vgg16_bn(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[6].in_features
-          features = list(model_ft.classifier.children())[:-1]
-          features.extend([nn.Linear(num_ftrs, len(class_names))])
-          model_ft.classifier = nn.Sequential(*features)
-          pretrained=pretrained_1
-        if(i=="vgg19_bn"):
-          model_ft = models.vgg19_bn(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[6].in_features
-          features = list(model_ft.classifier.children())[:-1]
-          features.extend([nn.Linear(num_ftrs, len(class_names))])
-          model_ft.classifier = nn.Sequential(*features)
-          pretrained=pretrained_1
-        if(i=="densenet121"):
-          model_ft = models.densenet121(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier.in_features
-          model_ft.classifier = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-        if(i=="densenet161"):
-          model_ft = models.densenet161(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier.in_features
-          model_ft.classifier = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-        if(i=="densenet169"):
-          model_ft = models.densenet169(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier.in_features
-          model_ft.classifier = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-        if(i=="densenet201"):
-          model_ft = models.densenet201(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier.in_features
-          model_ft.classifier = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
         if(i=="wide_resnet50_2"):
           model_ft = models.wide_resnet50_2(pretrained=pretrained_1)
           model_ft = set_parameter_requires_grad(model_ft, feature_extract)
@@ -848,70 +697,12 @@ for  kk in range(k_fold):
           num_ftrs = model_ft.fc.in_features
           model_ft.fc = nn.Linear(num_ftrs, len(class_names))
           pretrained=pretrained_1
-        if(i=="squeezenet1_1"): 
-          model_ft = models.squeezenet1_1(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          in_ftrs = model_ft.classifier[1].in_channels
-          out_ftrs = model_ft.classifier[1].out_channels
-          features = list(model_ft.classifier.children())
-          features[1] = nn.Conv2d(in_ftrs, len(class_names), kernel_size=(3,3),stride=1)
-          features[3] = nn.AvgPool2d(2, stride=1)
-          model_ft.classifier = nn.Sequential(*features)
-          model_ft.num_classes = len(class_names)
-          pretrained=pretrained_1
-        if(i=="squeezenet1_0"): 
-          model_ft = models.squeezenet1_0(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          in_ftrs = model_ft.classifier[1].in_channels
-          out_ftrs = model_ft.classifier[1].out_channels
-          features = list(model_ft.classifier.children())
-          features[1] = nn.Conv2d(in_ftrs, len(class_names), kernel_size=(3,3),stride=1)
-          features[3] = nn.AvgPool2d(2, stride=1)
-          model_ft.classifier = nn.Sequential(*features)
-          model_ft.num_classes = len(class_names)
-          pretrained=pretrained_1
         if(i=="googlenet"):
           model_ft = models.googlenet(pretrained=pretrained_2)
           model_ft = set_parameter_requires_grad(model_ft, feature_extract)
           num_ftrs = model_ft.fc.in_features
           model_ft.fc = nn.Linear(num_ftrs, len(class_names))
           pretrained=pretrained_2
-        if(i=="alexnet"): 
-          model_ft = models.alexnet(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          """layers_to_freeze = [model_ft.features[0],model_ft.features[3],model_ft.features[6],model_ft.features[8]]
-          for layer in layers_to_freeze:
-            for params in layer.parameters():
-              params.requires_grad = False"""
-          model_ft.classifier[6] = nn.Linear(in_features=4096, out_features=len(class_names), bias=True)
-          pretrained=pretrained_1
-        if(i=="shufflenet_v2_x1_0"):
-          model_ft = models.shufflenet_v2_x1_0(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.fc.in_features
-          model_ft.fc = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-        if(i=="mobilenet_v2"):
-          model_ft = models.mobilenet_v2(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[1].in_features
-          model_ft.classifier[1] = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-        if(i=="mnasnet1_0"):
-          model_ft = models.mnasnet1_0(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[1].in_features
-          model_ft.classifier[1] = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-        if(i=="inception_v3"):
-          model_ft = models.inception_v3(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          model_ft.aux_logits=False
-          """num_ftrs = model_ft.AuxLogits.fc.in_features
-          model_ft.AuxLogits.fc = nn.Linear(num_ftrs, len(class_names))"""
-          num_ftrs = model_ft.fc.in_features
-          model_ft.fc = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
 
         # for more then 2 classes in any model
         # model_ft = nn.Sequential(model_ft,nn.Softmax(1))
@@ -1164,124 +955,6 @@ for kk in range(k_fold):
   models_result_image=pd.DataFrame()
   for i in models_list:
       print(i)
-      if(i=="resnet18"):
-          model_ft = models.resnet18(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.fc.in_features
-          model_ft.fc = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-      if(i=="resnet34"):
-          model_ft = models.resnet34(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.fc.in_features
-          model_ft.fc = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-      if(i=="resnet50"):
-          model_ft = models.resnet50(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.fc.in_features
-          model_ft.fc = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-      if(i=="resnet101"):
-          model_ft = models.resnet101(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.fc.in_features
-          model_ft.fc = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-      if(i=="resnet152"):
-          model_ft = models.resnet152(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.fc.in_features
-          model_ft.fc = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-      if(i=="vgg11"):
-          model_ft = models.vgg11(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[6].in_features
-          features = list(model_ft.classifier.children())[:-1]
-          features.extend([nn.Linear(num_ftrs, len(class_names))])
-          model_ft.classifier = nn.Sequential(*features)
-          pretrained=pretrained_1
-      if(i=="vgg13"):
-          model_ft = models.vgg13(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[6].in_features
-          features = list(model_ft.classifier.children())[:-1]
-          features.extend([nn.Linear(num_ftrs, len(class_names))])
-          model_ft.classifier = nn.Sequential(*features)
-          pretrained=pretrained_1
-      if(i=="vgg16"):
-          model_ft = models.vgg16(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[6].in_features
-          features = list(model_ft.classifier.children())[:-1]
-          features.extend([nn.Linear(num_ftrs, len(class_names))])
-          model_ft.classifier = nn.Sequential(*features)
-          pretrained=pretrained_1
-      if(i=="vgg19"):
-          model_ft = models.vgg19(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[6].in_features
-          features = list(model_ft.classifier.children())[:-1]
-          features.extend([nn.Linear(num_ftrs, len(class_names))])
-          model_ft.classifier = nn.Sequential(*features)
-          pretrained=pretrained_1
-      if(i=="vgg11_bn"):
-          model_ft = models.vgg11_bn(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[6].in_features
-          features = list(model_ft.classifier.children())[:-1]
-          features.extend([nn.Linear(num_ftrs, len(class_names))])
-          model_ft.classifier = nn.Sequential(*features)
-          pretrained=pretrained_1
-      if(i=="vgg13_bn"):
-          model_ft = models.vgg13_bn(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[6].in_features
-          features = list(model_ft.classifier.children())[:-1]
-          features.extend([nn.Linear(num_ftrs, len(class_names))])
-          model_ft.classifier = nn.Sequential(*features)
-          pretrained=pretrained_1
-      if(i=="vgg16_bn"):
-          model_ft = models.vgg16_bn(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[6].in_features
-          features = list(model_ft.classifier.children())[:-1]
-          features.extend([nn.Linear(num_ftrs, len(class_names))])
-          model_ft.classifier = nn.Sequential(*features)
-          pretrained=pretrained_1
-      if(i=="vgg19_bn"):
-          model_ft = models.vgg19_bn(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[6].in_features
-          features = list(model_ft.classifier.children())[:-1]
-          features.extend([nn.Linear(num_ftrs, len(class_names))])
-          model_ft.classifier = nn.Sequential(*features)
-          pretrained=pretrained_1
-      if(i=="densenet121"):
-          model_ft = models.densenet121(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier.in_features
-          model_ft.classifier = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-      if(i=="densenet161"):
-          model_ft = models.densenet161(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier.in_features
-          model_ft.classifier = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-      if(i=="densenet169"):
-          model_ft = models.densenet169(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier.in_features
-          model_ft.classifier = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-      if(i=="densenet201"):
-          model_ft = models.densenet201(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier.in_features
-          model_ft.classifier = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
       if(i=="wide_resnet50_2"):
           model_ft = models.wide_resnet50_2(pretrained=pretrained_1)
           model_ft = set_parameter_requires_grad(model_ft, feature_extract)
@@ -1306,70 +979,12 @@ for kk in range(k_fold):
           num_ftrs = model_ft.fc.in_features
           model_ft.fc = nn.Linear(num_ftrs, len(class_names))
           pretrained=pretrained_1
-      if(i=="squeezenet1_1"): 
-          model_ft = models.squeezenet1_1(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          in_ftrs = model_ft.classifier[1].in_channels
-          out_ftrs = model_ft.classifier[1].out_channels
-          features = list(model_ft.classifier.children())
-          features[1] = nn.Conv2d(in_ftrs, len(class_names), kernel_size=(3,3),stride=1)
-          features[3] = nn.AvgPool2d(2, stride=1)
-          model_ft.classifier = nn.Sequential(*features)
-          model_ft.num_classes = len(class_names)
-          pretrained=pretrained_1
-      if(i=="squeezenet1_0"): 
-          model_ft = models.squeezenet1_0(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          in_ftrs = model_ft.classifier[1].in_channels
-          out_ftrs = model_ft.classifier[1].out_channels
-          features = list(model_ft.classifier.children())
-          features[1] = nn.Conv2d(in_ftrs, len(class_names), kernel_size=(3,3),stride=1)
-          features[3] = nn.AvgPool2d(2, stride=1)
-          model_ft.classifier = nn.Sequential(*features)
-          model_ft.num_classes = len(class_names)
-          pretrained=pretrained_1
       if(i=="googlenet"):
           model_ft = models.googlenet(pretrained=pretrained_2)
           model_ft = set_parameter_requires_grad(model_ft, feature_extract)
           num_ftrs = model_ft.fc.in_features
           model_ft.fc = nn.Linear(num_ftrs, len(class_names))
           pretrained=pretrained_2
-      if(i=="alexnet"): 
-          model_ft = models.alexnet(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          """layers_to_freeze = [model_ft.features[0],model_ft.features[3],model_ft.features[6],model_ft.features[8]]
-          for layer in layers_to_freeze:
-            for params in layer.parameters():
-              params.requires_grad = False"""
-          model_ft.classifier[6] = nn.Linear(in_features=4096, out_features=len(class_names), bias=True)
-          pretrained=pretrained_1
-      if(i=="shufflenet_v2_x1_0"):
-          model_ft = models.shufflenet_v2_x1_0(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.fc.in_features
-          model_ft.fc = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-      if(i=="mobilenet_v2"):
-          model_ft = models.mobilenet_v2(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[1].in_features
-          model_ft.classifier[1] = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-      if(i=="mnasnet1_0"):
-          model_ft = models.mnasnet1_0(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          num_ftrs = model_ft.classifier[1].in_features
-          model_ft.classifier[1] = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
-      if(i=="inception_v3"):
-          model_ft = models.inception_v3(pretrained=pretrained_1)
-          model_ft = set_parameter_requires_grad(model_ft, feature_extract)
-          model_ft.aux_logits=False
-          """num_ftrs = model_ft.AuxLogits.fc.in_features
-          model_ft.AuxLogits.fc = nn.Linear(num_ftrs, len(class_names))"""
-          num_ftrs = model_ft.fc.in_features
-          model_ft.fc = nn.Linear(num_ftrs, len(class_names))
-          pretrained=pretrained_1
       model_ft.load_state_dict(torch.load("/content/drive/MyDrive/Deep_Learning_Altrasound_Images/results_11_CH_123/models/"+str(kk)+"_"+i+"_best_acc_imagenet_False_25_8_256_224_400_0.2_CH_123_0.001_0.1_5"))
       with torch.no_grad():
         tl=[]
