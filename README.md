@@ -1542,7 +1542,7 @@ g.savefig(PATH+"box_plot.pdf",bbox_inches ="tight", pad_inches = 1, transparent 
 ```
 
 
-![png](ultrasound_images_new_11_imp_files/ultrasound_images_new_11_imp_17_0.png)
+![boxplot](https://github.com/krishan57gupta/UPAHAR/blob/master/box_plot.png)
 
 
 
