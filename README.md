@@ -741,7 +741,7 @@ for  kk in range(k_fold):
 
 
 
-![png](ultrasound_images_new_11_imp_files/ultrasound_images_new_11_imp_11_1.png)
+![images](https://github.com/krishan57gupta/UPAHAR/blob/master/images.png)
 
 
     resnet50
@@ -756,107 +756,6 @@ for  kk in range(k_fold):
 
 
     Downloading: "https://download.pytorch.org/models/resnext101_32x8d-8ba56ff5.pth" to /root/.cache/torch/hub/checkpoints/resnext101_32x8d-8ba56ff5.pth
-
-
-
-    HBox(children=(FloatProgress(value=0.0, max=356082095.0), HTML(value='')))
-
-
-    
-    Epoch 0/99
-    ----------
-    train_1 Loss: 0.7026 Acc: 0.5449
-    val_1 Loss: 0.7054 Acc: 0.4211
-    Epoch 1/99
-    ----------
-    train_1 Loss: 0.6837 Acc: 0.5678
-    val_1 Loss: 0.7543 Acc: 0.4079
-    Epoch 2/99
-    ----------
-    train_1 Loss: 0.6692 Acc: 0.5874
-    val_1 Loss: 0.6335 Acc: 0.7237
-    Epoch 3/99
-    ----------
-    train_1 Loss: 0.6504 Acc: 0.6099
-    val_1 Loss: 0.7502 Acc: 0.6447
-    Epoch 4/99
-    ----------
-    train_1 Loss: 0.5977 Acc: 0.6711
-    val_1 Loss: 0.6453 Acc: 0.6842
-    Epoch 5/99
-    ----------
-    train_1 Loss: 0.4159 Acc: 0.8027
-    val_1 Loss: 0.7772 Acc: 0.7105
-    Epoch 6/99
-    ----------
-    train_1 Loss: 0.3297 Acc: 0.8472
-    val_1 Loss: 0.7754 Acc: 0.7632
-    Epoch 7/99
-    ----------
-    train_1 Loss: 0.2586 Acc: 0.8806
-    val_1 Loss: 0.8553 Acc: 0.7237
-    Epoch 8/99
-    ----------
-    train_1 Loss: 0.2049 Acc: 0.9060
-    val_1 Loss: 0.9963 Acc: 0.7105
-    Epoch 9/99
-    ----------
-    train_1 Loss: 0.1781 Acc: 0.9172
-    val_1 Loss: 1.1418 Acc: 0.7237
-    Epoch 10/99
-    ----------
-    train_1 Loss: 0.1543 Acc: 0.9297
-    val_1 Loss: 0.9157 Acc: 0.7368
-    Epoch 11/99
-    ----------
-    train_1 Loss: 0.1361 Acc: 0.9354
-    val_1 Loss: 0.8488 Acc: 0.7368
-    Epoch 12/99
-    ----------
-    train_1 Loss: 0.1271 Acc: 0.9415
-    val_1 Loss: 0.9364 Acc: 0.7368
-    Epoch 13/99
-    ----------
-    train_1 Loss: 0.1237 Acc: 0.9411
-    val_1 Loss: 1.1382 Acc: 0.7105
-    Epoch 14/99
-    ----------
-    train_1 Loss: 0.1188 Acc: 0.9455
-    val_1 Loss: 0.8415 Acc: 0.7368
-    Epoch 15/99
-    ----------
-    train_1 Loss: 0.1182 Acc: 0.9443
-    val_1 Loss: 0.8351 Acc: 0.7632
-    Epoch 16/99
-    ----------
-    train_1 Loss: 0.1106 Acc: 0.9467
-    val_1 Loss: 0.9732 Acc: 0.7368
-    Epoch 17/99
-    ----------
-    train_1 Loss: 0.1129 Acc: 0.9500
-    val_1 Loss: 0.9643 Acc: 0.7500
-    Epoch 18/99
-    ----------
-    train_1 Loss: 0.1126 Acc: 0.9459
-    val_1 Loss: 0.9356 Acc: 0.7500
-    Epoch 19/99
-    ----------
-    train_1 Loss: 0.1077 Acc: 0.9496
-    val_1 Loss: 1.1016 Acc: 0.6974
-    Epoch 20/99
-    ----------
-    train_1 Loss: 0.1110 Acc: 0.9453
-    val_1 Loss: 1.0195 Acc: 0.7368
-    Epoch 21/99
-    ----------
-    train_1 Loss: 0.1103 Acc: 0.9484
-    val_1 Loss: 1.0232 Acc: 0.7237
-    Epoch 22/99
-    ----------
-    train_1 Loss: 0.1145 Acc: 0.9447
-    val_1 Loss: 0.9962 Acc: 0.7368
-    Epoch 23/99
-    ----------
 
 
 
